@@ -27,11 +27,19 @@ export const useModalsStore = defineStore("modals", () => {
         isOpen.value = false;
     }
 
+    function onSaveServerChanges(payload: { name: string, imageUrl: string }) {
+        if (data.value?.server) {
+            data.value.server.name = payload.name;
+            data.value.server.imageUrl = payload.imageUrl;
+        }
+    }
+
     return {
         isOpen,
         type,
         data,
         onOpen,
         onClose,
+        onSaveServerChanges
     };
 });
