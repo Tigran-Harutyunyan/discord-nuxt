@@ -21,6 +21,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { useModalsStore } from "@/stores/modals";
+
+const { onOpen } = useModalsStore();
+
 interface ServerHeaderProps {
   server: Server;
   role?: MemberRole;
@@ -90,7 +94,7 @@ const isModerator = isAdmin || role === MemberRole.MODERATOR;
         <Trash class="h-4 w-4 ml-auto" />
       </DropdownMenuItem>
       <DropdownMenuItem
-        v-if="!isAdmin"
+        v-else
         @click="onOpen('leaveServer', { server })"
         class="text-rose-500 px-3 py-2 text-sm cursor-pointer"
       >
