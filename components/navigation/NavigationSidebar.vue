@@ -10,11 +10,15 @@ import type { Server } from "@prisma/client";
 
 import InitialModal from "@/components/modals/InitialModal.vue";
 
+import { useModalsStore } from "@/stores/modals";
+
+const { data } = storeToRefs(useModalsStore());
+
 const showDialog = ref(false);
 
 const servers = ref<Server[]>([]);
 
-const { data: serverData, refresh } = useLazyAsyncData("serverData", () =>
+const { data: serverData, refresh } = useAsyncData("serverData", () =>
   $fetch("/api/servers")
 );
 
@@ -28,6 +32,21 @@ watch(serverData, (newData) => {
     servers.value = newData;
   }
 });
+
+watch(
+  () => data.value.server,
+  (newVal) => {
+    servers.value.forEach((server) => {
+      if (server.id === newVal?.id) {
+        server.name = newVal.name;
+        server.imageUrl = newVal.imageUrl;
+      }
+    });
+  },
+  {
+    deep: true,
+  }
+);
 </script>
 
 <template>
