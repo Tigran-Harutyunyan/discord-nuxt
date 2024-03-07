@@ -13,9 +13,9 @@ import { useModalsStore } from "@/stores/modals";
 
 const { type, data, isOpen } = storeToRefs(useModalsStore());
 
-const { onClose, onOpen } = useModalsStore();
+const server = data.value.server;
 
-const router = useRouter();
+const { onClose } = useModalsStore();
 
 const isLoading = ref(false);
 
@@ -24,14 +24,14 @@ const isModalOpen = isOpen.value && type.value === "leaveServer";
 const onClick = async () => {
   try {
     isLoading.value = true;
-    if (!data.value.server?.id) return;
+    if (!server?.id) return;
 
-    await $fetch(`/api/servers/${data.value.server?.id}/leave`, {
+    await $fetch(`/api/servers/${server?.id}/leave`, {
       method: "PATCH",
     });
 
     onClose();
-    router.push("/");
+    navigateTo("/");
   } catch (error) {
     console.log(error);
   } finally {
@@ -44,11 +44,11 @@ const onClick = async () => {
   <Dialog v-model:open="isModalOpen">
     <DialogContent class="bg-white text-black p-0 overflow-hidden">
       <DialogClose as-child>
-        <CloseDialogIcon @click="onClose">Leave Server</CloseDialogIcon>
+        <CloseDialogIcon @click="onClose"></CloseDialogIcon>
       </DialogClose>
       <DialogHeader class="pt-8 px-6">
         <DialogTitle class="text-2xl text-center font-bold">
-          Invite Friends
+          Leave Server
         </DialogTitle>
         <DialogDescription class="text-center text-zinc-500">
           Are you sure you want to leave
@@ -62,7 +62,7 @@ const onClick = async () => {
             Cancel
           </Button>
           <Button :disabled="isLoading" @click="onClick" variant="primary">
-            Confirm
+            {{ isLoading ? "Confirming" : "Confirm" }}
           </Button>
         </div>
       </DialogFooter>
