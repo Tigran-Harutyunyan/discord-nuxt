@@ -22,7 +22,7 @@ const { show } = defineProps<{
   show: boolean;
 }>();
 
-const emit = defineEmits(["done"]);
+const emit = defineEmits(["done", "close"]);
 
 const { toast } = useToast();
 
@@ -86,7 +86,6 @@ const onSubmit = form.handleSubmit(async (values) => {
             <FormItem>
               <FormControl>
                 <ImageUpload
-                  @click.stop.preveent="showDialog = false"
                   :disabled="isLoading"
                   :value="componentField.modelValue"
                   @change="onImgUpload"

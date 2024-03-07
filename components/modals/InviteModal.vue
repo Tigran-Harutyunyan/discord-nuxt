@@ -67,7 +67,7 @@ const onNew = async () => {
   <Dialog v-model:open="isModalOpen">
     <DialogContent class="bg-white text-black p-0 overflow-hidden">
       <DialogClose as-child>
-        <CloseDialogIcon @click="onClose">close changes</CloseDialogIcon>
+        <CloseDialogIcon @click="onClose"></CloseDialogIcon>
       </DialogClose>
       <DialogHeader class="pt-8 px-6">
         <DialogTitle class="text-2xl text-center font-bold">
