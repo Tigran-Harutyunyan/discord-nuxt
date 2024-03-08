@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { Server } from "@/types";
-import { MemberRole } from "@prisma/client";
+import { MemberRole, type Server } from "@prisma/client";
 
 import {
   ChevronDown,
