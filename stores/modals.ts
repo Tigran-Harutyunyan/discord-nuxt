@@ -1,10 +1,14 @@
 import { defineStore } from "pinia";
-import { type Channel, ChannelType, type Server } from "@prisma/client";
+import { type Channel, ChannelType, type Server, type Member, type Profile } from "@prisma/client";
 
 export type ModalType = "createServer" | "invite" | "editServer" | "members" | "createChannel" | "leaveServer" | "deleteServer" | "deleteChannel" | "editChannel" | "messageFile" | "deleteMessage";
 
+type serverMember = Member & {
+    profile: Profile
+}
+
 interface ModalData {
-    server?: Server;
+    server?: Server & { members?: serverMember[] };
     channel?: Channel;
     channelType?: ChannelType;
     apiUrl?: string;

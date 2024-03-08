@@ -189,7 +189,6 @@ const data = [
             v-for="member in members"
             :key="member.id"
             :member="member"
-            :server="server"
           />
         </div>
       </div>
