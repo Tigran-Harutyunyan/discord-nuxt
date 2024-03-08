@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { h } from "vue";
-import type { Server, Channel, Member } from "@/types/index";
+import type { Server, Channel, Member, Profile } from "@prisma/client";
 
+type serverMember = Member & {
+  profile: Profile;
+};
 import { ChannelType, MemberRole } from "@prisma/client";
 import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from "lucide-vue-next";
 
@@ -19,30 +22,42 @@ import { useMainStore } from "@/stores/main";
 const { profile } = storeToRefs(useMainStore());
 
 interface ServerSidebarProps {
-  server: Server;
+  server: Server & { members?: serverMember[]; channels?: Channel[] };
 }
 const { server } = defineProps<ServerSidebarProps>();
 
 const role = computed(() => {
-  if (!profile.value) return undefined;
+  if (!profile.value || !server.members) return undefined;
   return server.members.find((member) => member.profileId === profile.value?.id)
     ?.role as MemberRole;
 });
 
-const textChannels = server?.channels.filter(
-  (channel: Channel) => channel.type === ChannelType.TEXT
-);
+const textChannels = computed(() => {
+  return server?.channels
+    ? server?.channels.filter(
+        (channel: Channel) => channel.type === ChannelType.TEXT
+      )
+    : [];
+});
 
-const audioChannels = server?.channels.filter(
-  (channel: Channel) => channel.type === ChannelType.AUDIO
-);
+const audioChannels = computed(() => {
+  return server?.channels
+    ? server?.channels.filter(
+        (channel: Channel) => channel.type === ChannelType.AUDIO
+      )
+    : [];
+});
 
-const videoChannels = server?.channels.filter(
-  (channel: Channel) => channel.type === ChannelType.VIDEO
-);
+const videoChannels = computed(() => {
+  return server?.channels
+    ? server?.channels.filter(
+        (channel: Channel) => channel.type === ChannelType.VIDEO
+      )
+    : [];
+});
 
 const members = computed(() => {
-  if (!profile.value) return [];
+  if (!profile.value || !server?.members) return [];
   return server?.members.filter(
     (member: Member) => member.profileId !== profile?.value?.id
   );
@@ -70,44 +85,46 @@ const roleIconMap = {
   }),
 };
 
-const data = [
-  {
-    label: "Text Channels",
-    type: "channel",
-    data: textChannels?.map((channel: Channel) => ({
-      id: channel.id,
-      name: channel.name,
-      icon: iconMap[channel.type],
-    })),
-  },
-  {
-    label: "Voice Channels",
-    type: "channel",
-    data: audioChannels?.map((channel: Channel) => ({
-      id: channel.id,
-      name: channel.name,
-      icon: iconMap[channel.type],
-    })),
-  },
-  {
-    label: "Video Channels",
-    type: "channel",
-    data: videoChannels?.map((channel: Channel) => ({
-      id: channel.id,
-      name: channel.name,
-      icon: iconMap[channel.type],
-    })),
-  },
-  {
-    label: "Members",
-    type: "member",
-    data: members.value?.map((member: Member) => ({
-      id: member.id,
-      name: member.profile.name,
-      icon: roleIconMap[member.role],
-    })),
-  },
-];
+const data = computed(() => {
+  return [
+    {
+      label: "Text Channels",
+      type: "channel",
+      data: textChannels.value?.map((channel: Channel) => ({
+        id: channel.id,
+        name: channel.name,
+        icon: iconMap[channel.type],
+      })),
+    },
+    {
+      label: "Voice Channels",
+      type: "channel",
+      data: audioChannels.value?.map((channel: Channel) => ({
+        id: channel.id,
+        name: channel.name,
+        icon: iconMap[channel.type],
+      })),
+    },
+    {
+      label: "Video Channels",
+      type: "channel",
+      data: videoChannels.value?.map((channel: Channel) => ({
+        id: channel.id,
+        name: channel.name,
+        icon: iconMap[channel.type],
+      })),
+    },
+    {
+      label: "Members",
+      type: "member",
+      data: members.value?.map((member: Member) => ({
+        id: member.id,
+        name: member.profile.name,
+        icon: roleIconMap[member.role],
+      })),
+    },
+  ];
+});
 </script>
 
 <template>
@@ -128,6 +145,7 @@ const data = [
             :channelType="ChannelType.TEXT"
             :role="role"
             label="Text Channels"
+            :server="server"
           />
           <div class="space-y-[2px]">
             <ServerChannel
@@ -146,7 +164,8 @@ const data = [
           sectionType="channels"
           :channelType="ChannelType.AUDIO"
           :role="role"
-          label="Voice Channels"
+          label="Audio Channels"
+          :server="server"
         />
         <div class="space-y-[2px]">
           <ServerChannel
@@ -165,6 +184,7 @@ const data = [
           :channelType="ChannelType.VIDEO"
           :role="role"
           label="Video Channels"
+          :server="server"
         />
         <div class="space-y-[2px]">
           <ServerChannel
