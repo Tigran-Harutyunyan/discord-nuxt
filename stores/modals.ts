@@ -8,7 +8,7 @@ type serverMember = Member & {
 }
 
 interface ModalData {
-    server?: Server & { members?: serverMember[] };
+    server?: Server & { members?: serverMember[], channels?: Channel[] };
     channel?: Channel;
     channelType?: ChannelType;
     apiUrl?: string;
@@ -38,12 +38,23 @@ export const useModalsStore = defineStore("modals", () => {
         }
     }
 
+    function onUpdateChannels(channels: Channel[]) {
+        if (data.value?.server) {
+            if (!data.value?.server?.channels) {
+                data.value.server.channels = [];
+            }
+
+            data.value.server.channels = channels;
+        }
+    }
+
     return {
         isOpen,
         type,
         data,
         onOpen,
         onClose,
-        onSaveServerChanges
+        onSaveServerChanges,
+        onUpdateChannels
     };
 });
