@@ -142,7 +142,7 @@ export default defineEventHandler(async (event) => {
 
         event.context?.appSocket.emit(updateKey, message);
 
-        return message
+        return message;
     } catch (error) {
         console.log("[MESSAGE_ID]", error);
         return createError({

@@ -170,7 +170,7 @@ watch(
         </div>
 
         <a
-          v-if="isImage"
+          v-if="isImage && typeof fileUrl === 'string'"
           :href="fileUrl || ''"
           target="_blank"
           rel="noopener noreferrer"
