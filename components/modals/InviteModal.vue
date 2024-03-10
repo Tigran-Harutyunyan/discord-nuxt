@@ -84,7 +84,7 @@ const onNew = async () => {
           <Input
             :disabled="isLoading"
             class="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
-            :value="inviteUrl"
+            v-model="inviteUrl"
           />
           <Button :disabled="isLoading" @click="onCopy" size="icon">
             <Check class="w-4 h-4" v-if="copied" />
