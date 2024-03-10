@@ -1,5 +1,4 @@
 import { useSocketStore } from "@/stores/socket";
-
 import { useQueryClient } from "@tanstack/vue-query";
 import type { Member, Message, Profile } from "@prisma/client";
 
@@ -25,7 +24,7 @@ export const useChatSocket = ({
     const queryClient = useQueryClient();
 
     const updateFn = (message: MessageWithMemberWithProfile) => {
-        console.log(updateKey, message)
+
         queryClient.setQueryData([queryKey], (oldData: any) => {
             if (!oldData || !oldData.pages || oldData.pages.length === 0) {
                 return oldData;
@@ -43,7 +42,6 @@ export const useChatSocket = ({
                 }
             });
 
-
             return {
                 ...oldData,
                 pages: newData,
@@ -52,8 +50,6 @@ export const useChatSocket = ({
     }
 
     const addFn = (message: MessageWithMemberWithProfile) => {
-        console.log(addKey, message);
-
         queryClient.setQueryData([queryKey], (oldData: any) => {
             if (!oldData || !oldData.pages || oldData.pages.length === 0) {
                 return {
@@ -72,25 +68,24 @@ export const useChatSocket = ({
                     ...newData[0].items,
                 ]
             };
-            console.log(oldData, newData)
+
             return {
                 ...oldData,
                 pages: newData,
             };
         })
-
     }
+
     onMounted(() => {
         if (!socket.value) return;
 
         socket.value.on(updateKey, updateFn);
-
         socket.value.on(addKey, addFn);
     });
 
     onUnmounted(() => {
         if (!socket.value) return;
-        console.log('unmounted')
+
         socket.value?.off(addKey, addFn);
         socket.value?.off(updateKey, updateFn);
     })
