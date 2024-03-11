@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt', '@nuxtjs/google-fonts', '@fixers/nuxt-stripe', '@nuxtjs/cloudinary', '@pinia/nuxt', "@nuxt/image", '@vueuse/nuxt', '@vee-validate/nuxt'],
+  modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt', '@hebilicious/vue-query-nuxt', '@nuxtjs/google-fonts', '@fixers/nuxt-stripe', '@nuxtjs/cloudinary', '@pinia/nuxt', "@nuxt/image", '@vueuse/nuxt', '@vee-validate/nuxt'],
   build: {
     transpile: ['vue-clerk', '@clerk/clerk-js'],
   },
@@ -16,6 +16,7 @@ export default defineNuxtConfig({
      */
     componentDir: './components/ui'
   },
+
   alias: {
     ".prisma/client/index-browser": "./node_modules/.prisma/client/index-browser.js"
   },
