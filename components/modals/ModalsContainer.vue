@@ -32,8 +32,6 @@ const computedComponent = computed(() => {
         return LeaveServerModal;
       case "createChannel":
         return CreateChannelModal;
-      case "deleteChannel":
-        return DeleteChannelModal;
       case "editChannel":
         return EditChannelModal;
       case "deleteMessage":
