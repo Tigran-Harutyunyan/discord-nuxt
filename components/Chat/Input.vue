@@ -83,7 +83,7 @@ const onInsertEmoji = (emoji: string) => {
               }`"
             />
             <div class="absolute top-7 right-8">
-              <EmojiPicker @change="onInsertEmoji" />
+              <!-- <EmojiPicker @change="onInsertEmoji" /> -->
             </div>
           </div>
         </FormControl>
