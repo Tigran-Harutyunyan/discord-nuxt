@@ -8,7 +8,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "start": "nuxt-start",
+    "start": "nuxt start",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "prisma generate && nuxt prepare"
@@ -59,7 +59,6 @@
     "vee-validate": "^4.12.5",
     "vue-clerk": "^0.2.0",
     "vue-sonner": "^1.0.3",
-    "zod": "^3.22.4",
-    "nuxt-start":"^2.17.3"
+    "zod": "^3.22.4"
   }
 }
