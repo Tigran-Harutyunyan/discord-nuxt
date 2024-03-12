@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Smile } from "lucide-vue-next";
 import { Picker, EmojiIndex } from "@/components/emoji-mart-vue-fast/src/";
-import data from "emoji-mart-vue-fast/data/all.json";
+import data from "@/components/emoji-mart-vue-fast/data/all.json";
 // Import default CSS
-import "emoji-mart-vue-fast/css/emoji-mart.css";
+import "@/components/emoji-mart-vue-fast/css/emoji-mart.css";
 import {
   Popover,
   PopoverContent,
@@ -13,7 +13,6 @@ import {
 const emit = defineEmits(["change"]);
 
 let emojiIndex = new EmojiIndex(data);
-const emojisOutput = ref("");
 
 const showEmoji = (emoji) => {
   emit("change", emoji.native);

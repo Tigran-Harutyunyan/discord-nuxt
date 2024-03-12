@@ -59,7 +59,7 @@ if (!channel.value || !member.value) {
       <ChatInput
         :name="channel.name"
         type="channel"
-        apiUrl="/api/socket/messages"
+        apiUrl="/api/messages"
         :query="{
           channelId: channel.id,
           serverId: channel.serverId,

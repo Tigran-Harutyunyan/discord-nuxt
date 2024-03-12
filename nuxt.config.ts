@@ -22,7 +22,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      clerkPublishableKey: process.env.NUXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+      clerkPublishableKey: process.env.CLERK_PUBLISHABLE_KEY,
       appUrl: process.env.NUXT_PUBLIC_APP_URL,
       unsplashAccessKey: process.env.NUXT_PUBLIC_UNSPLASH_ACCESS_KEY,
     },
