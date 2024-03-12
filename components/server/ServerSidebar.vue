@@ -16,49 +16,105 @@ import ServerSearch from "./ServerSearch.vue";
 import ServerSection from "./ServerSection.vue";
 import ServerChannel from "./ServerChannel.vue";
 import ServerMember from "./ServerMember.vue";
-
+import { useModalsStore } from "@/stores/modals";
 import { useMainStore } from "@/stores/main";
 
 const { profile } = storeToRefs(useMainStore());
 
-interface ServerSidebarProps {
-  server: Server & { members?: serverMember[]; channels?: Channel[] };
+type ServerSidebarProps = Server & {
+  members?: serverMember[];
+  channels?: Channel[];
+};
+const route = useRoute();
+
+const { data } = storeToRefs(useModalsStore());
+const { updateServer } = useMainStore();
+
+const server = ref<ServerSidebarProps | null>();
+
+const isLoading = ref(false);
+
+const params = useState("routeParams");
+
+const getServer = async (serverId: string) => {
+  if (!serverId || isLoading.value) return;
+  if (server.value && server.value.id === serverId) return;
+
+  isLoading.value = true;
+
+  const response = await $fetch<ServerSidebarProps | null>(
+    `/api/server/${route.params.serverId}`
+  );
+
+  isLoading.value = false;
+
+  if (response?.id) {
+    server.value = response;
+    updateServer(server.value);
+  }
+};
+
+if (data.value?.server?.id !== params.value?.serverId) {
+  getServer(params.value?.serverId);
+} else {
+  server.value = data.value?.server;
 }
-const { server } = defineProps<ServerSidebarProps>();
+watch(
+  () => route.path,
+  async () => {
+    if (data.value?.server?.id !== route.params?.serverId) {
+      getServer(route.params?.serverId as string);
+    }
+  }
+);
+
+watch(
+  () => data.value?.server,
+  (members) => {
+    if (server.value && members && Array.isArray(members)) {
+      server.value.members = members;
+      updateServer(server.value);
+    }
+  },
+  {
+    deep: true,
+  }
+);
 
 const role = computed(() => {
-  if (!profile.value || !server.members) return undefined;
-  return server.members.find((member) => member.profileId === profile.value?.id)
-    ?.role as MemberRole;
+  if (!profile.value || !server.value?.members) return undefined;
+  return server.value.members.find(
+    (member) => member.profileId === profile.value?.id
+  )?.role as MemberRole;
 });
 
 const textChannels = computed(() => {
-  return server?.channels
-    ? server?.channels.filter(
+  return server.value?.channels
+    ? server.value?.channels.filter(
         (channel: Channel) => channel.type === ChannelType.TEXT
       )
     : [];
 });
 
 const audioChannels = computed(() => {
-  return server?.channels
-    ? server?.channels.filter(
+  return server.value?.channels
+    ? server.value?.channels.filter(
         (channel: Channel) => channel.type === ChannelType.AUDIO
       )
     : [];
 });
 
 const videoChannels = computed(() => {
-  return server?.channels
-    ? server?.channels.filter(
+  return server.value?.channels
+    ? server.value?.channels.filter(
         (channel: Channel) => channel.type === ChannelType.VIDEO
       )
     : [];
 });
 
 const members = computed(() => {
-  if (!profile.value || !server?.members) return [];
-  return server?.members.filter(
+  if (!profile.value || !server.value?.members) return [];
+  return server.value?.members.filter(
     (member: Member) => member.profileId !== profile?.value?.id
   );
 });
@@ -85,7 +141,7 @@ const roleIconMap = {
   }),
 };
 
-const data = computed(() => {
+const chanelsData = computed(() => {
   return [
     {
       label: "Text Channels",
@@ -129,12 +185,13 @@ const data = computed(() => {
 
 <template>
   <div
+    v-if="server"
     class="flex flex-col h-full text-primary w-full dark:bg-[#2B2D31] bg-[#F2F3F5]"
   >
     <ServerHeader :server="server" :role="role" />
     <ScrollArea class="flex-1 px-3">
       <div class="mt-2">
-        <ServerSearch :data="data" />
+        <ServerSearch :data="chanelsData" />
       </div>
       <Separator class="bg-zinc-200 dark:bg-zinc-700 rounded-md my-2" />
 
