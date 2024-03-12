@@ -1,16 +1,10 @@
 <script setup lang="ts">
 import NavigationSidebar from "@/components/navigation/NavigationSidebar.vue";
-import type { Server } from "@/types/index";
-
 import { useMainStore } from "@/stores/main";
 
 const { profile } = storeToRefs(useMainStore());
 
 const { updateProfile } = useMainStore();
-
-interface ServerSidebarProps {
-  server: Server;
-}
 
 if (profile.value === null) {
   const response = await $fetch("/api/profile");
@@ -22,7 +16,7 @@ if (profile.value === null) {
 </script>
 
 <template>
-  <ClientOnly><Setup /></ClientOnly>
+  <!-- <ClientOnly><Setup /></ClientOnly> -->
 
   <div class="h-full">
     <div class="hidden md:flex h-full w-[72px] z-30 flex-col fixed inset-y-0">
