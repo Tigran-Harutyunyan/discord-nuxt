@@ -47,6 +47,14 @@ import {
   supportsVP9,
 } from "livekit-client";
 
+interface MediaRoomProps {
+  chatId: string;
+  video: boolean;
+  audio: boolean;
+}
+
+const { chatId, video, audio } = defineProps<MediaRoomProps>();
+
 declare global {
   interface Window {
     currentRoom: any;
@@ -77,7 +85,7 @@ let startTime: number;
 const appActions = {
   connectWithFormInput: async () => {
     const url = "https://discord-r2m02yzv.livekit.cloud";
-    const token = (await $fetch(`/api/livekit`)) as string;
+    const token = (await $fetch(`/api/livekit?room=${chatId}`)) as string;
     const simulcast = true;
     const dynacast = true;
     const forceTURN = false;

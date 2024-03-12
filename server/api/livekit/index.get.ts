@@ -6,6 +6,8 @@ export default defineEventHandler(async (event) => {
 
     if (!(auth?.userId)) return;
 
+    const { room } = await getQuery(event);
+
     const profile = await currentProfile(event);
 
     if (!profile) {
@@ -15,20 +17,26 @@ export default defineEventHandler(async (event) => {
         });
     }
 
+    if (!room) {
+        return createError({
+            statusCode: 400,
+            statusMessage: "Missing 'room query parameter"
+        });
+    }
+
     try {
         // if this room doesn't exist, it'll be automatically created when the first
-        // client joins
-        const roomName = 'quickstart-room';
+        // client joins 
         // identifier to be used for participant.
         // it's available as LocalParticipant.identity with livekit-client SDK
-        const participantName = 'quickstart-username';
+        const participantName = profile.name;
 
         const at = new AccessToken(process.env.LIVEKIT_API_KEY, process.env.LIVEKIT_API_SECRET, {
             identity: participantName,
             // token to expire after 10 minutes
             ttl: '10m',
         });
-        at.addGrant({ roomJoin: true, room: roomName });
+        at.addGrant({ roomJoin: true, room: room as string, canPublish: true, canSubscribe: true });
 
         return await at.toJwt();
     } catch (error) {
@@ -38,5 +46,4 @@ export default defineEventHandler(async (event) => {
             statusMessage: "Internal Error"
         });
     }
-
 });
