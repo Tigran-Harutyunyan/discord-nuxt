@@ -31,6 +31,8 @@ const isLoading = ref(false);
 
 const router = useRouter();
 
+const route = useRoute();
+
 const onClick = async () => {
   try {
     isLoading.value = true;
@@ -57,8 +59,11 @@ const onClick = async () => {
       });
       onClose();
     }
+    debugger;
 
-    router.push(`/servers/${server?.id}`);
+    if (route.params.channelId && route.params.channelId === channel?.id) {
+      router.push(`/servers/${server?.id}`);
+    }
   } catch (error) {
     console.log(error);
   } finally {
