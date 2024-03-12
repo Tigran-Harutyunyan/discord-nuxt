@@ -8,8 +8,6 @@ export default defineEventHandler(async (event) => {
 
     const { content, type } = await readBody(event);
 
-    console.log(type)
-
     const profile = await currentProfile(event);
 
     if (!profile) {
