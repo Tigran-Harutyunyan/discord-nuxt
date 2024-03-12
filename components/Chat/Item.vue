@@ -79,8 +79,7 @@ const fileType = fileUrl?.split(".").pop();
 const isAdmin = currentMember.role === MemberRole.ADMIN;
 const isModerator = currentMember.role === MemberRole.MODERATOR;
 const isOwner = currentMember.id === member.id;
-const canDeleteMessage = !deleted && (isAdmin || isModerator || isOwner);
-const canEditMessage = !deleted && isOwner && !fileUrl;
+
 const isPDF = fileType === "pdf" && fileUrl;
 const isImage = !isPDF && fileUrl;
 
@@ -100,7 +99,9 @@ const onSubmit = form.handleSubmit(async (values) => {
   try {
     const url = qs.stringifyUrl({
       url: `${socketUrl}/${id}`,
-      query: socketQuery,
+      query: socketUrl.includes("direct-messages")
+        ? { directMessageId: id, ...socketQuery }
+        : socketQuery,
     });
 
     const response = await $fetch<Message | undefined>(url, {
@@ -248,11 +249,11 @@ watch(
         </div>
       </div>
     </div>
-    <template v-if="canDeleteMessage">
+    <template v-if="!deleted && isOwner">
       <div
         class="hidden group-hover:flex items-center gap-x-2 absolute p-1 top-2 right-5 bg-white dark:bg-zinc-800 border rounded-sm"
       >
-        <ActionTooltip label="Edit" v-if="canEditMessage">
+        <ActionTooltip label="Edit" v-if="!deleted && isOwner && !fileUrl">
           <Edit
             @click="isEditing = !isEditing"
             class="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
@@ -264,7 +265,9 @@ watch(
             @click="
               onOpen('deleteMessage', {
                 apiUrl: `${socketUrl}/${id}`,
-                query: socketQuery,
+                query: socketUrl.includes('direct-messages')
+                  ? { directMessageId: id, ...socketQuery }
+                  : socketQuery,
               })
             "
             class="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"

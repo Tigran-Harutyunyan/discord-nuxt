@@ -5,13 +5,6 @@ import { Button } from "@/components/ui/button";
 
 import NavigationSidebar from "@/components/navigation/NavigationSidebar.vue";
 import ServerSidebar from "@/components/server/ServerSidebar.vue";
-import { useMainStore } from "@/stores/main";
-
-const { server } = storeToRefs(useMainStore());
-
-const { serverId } = defineProps<{
-  serverId: string;
-}>();
 </script>
 
 <template>
@@ -25,7 +18,7 @@ const { serverId } = defineProps<{
       <div class="w-[72px]">
         <NavigationSidebar />
       </div>
-      <ServerSidebar :serverId="serverId" :server="server" class="pr-8" />
+      <ServerSidebar class="pr-8" />
     </SheetContent>
   </Sheet>
 </template>

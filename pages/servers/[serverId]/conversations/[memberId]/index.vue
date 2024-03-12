@@ -101,7 +101,7 @@ onMounted(() => {
       <ChatInput
         :name="otherMember.profile.name"
         type="conversation"
-        apiUrl="/api/socket/direct-messages"
+        apiUrl="/api/direct-messages"
         :query="{
           conversationId: conversation.id,
         }"

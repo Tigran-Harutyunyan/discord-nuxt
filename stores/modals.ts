@@ -48,6 +48,10 @@ export const useModalsStore = defineStore("modals", () => {
         }
     }
 
+    function updateServer(server: Server) {
+        data.value.server = server;
+    }
+
     return {
         isOpen,
         type,
@@ -55,6 +59,7 @@ export const useModalsStore = defineStore("modals", () => {
         onOpen,
         onClose,
         onSaveServerChanges,
-        onUpdateChannels
+        onUpdateChannels,
+        updateServer
     };
 });

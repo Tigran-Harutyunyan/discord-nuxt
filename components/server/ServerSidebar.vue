@@ -28,7 +28,7 @@ type ServerSidebarProps = Server & {
 const route = useRoute();
 
 const { data } = storeToRefs(useModalsStore());
-const { updateServer } = useMainStore();
+const { updateServer } = useModalsStore();
 
 const server = ref<ServerSidebarProps | null>();
 
@@ -54,11 +54,12 @@ const getServer = async (serverId: string) => {
   }
 };
 
-if (data.value?.server?.id !== params.value?.serverId) {
-  getServer(params.value?.serverId);
+if (!data.value?.server) {
+  getServer(params.value?.serverId || route.params?.serverId);
 } else {
   server.value = data.value?.server;
 }
+
 watch(
   () => route.path,
   async () => {
