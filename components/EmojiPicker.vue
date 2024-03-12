@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Smile } from "lucide-vue-next";
-import { Picker, EmojiIndex } from "emoji-mart-vue-fast/src";
+import { Picker, EmojiIndex } from "@/components/emoji-mart-vue-fast/src/";
 import data from "emoji-mart-vue-fast/data/all.json";
 // Import default CSS
 import "emoji-mart-vue-fast/css/emoji-mart.css";
