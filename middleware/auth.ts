@@ -1,6 +1,6 @@
 import { useClerk } from 'vue-clerk'
 
-export default defineNuxtRouteMiddleware(() => {
+export default defineNuxtRouteMiddleware((to) => {
     const nuxtApp = useNuxtApp()
     const clerk = useClerk()
 
@@ -17,4 +17,6 @@ export default defineNuxtRouteMiddleware(() => {
     if (process.client && clerk.loaded && !clerk.user?.id) {
         return navigateTo('/sign-in')
     }
+
+    useState('routeParams', () => to.params)
 })
