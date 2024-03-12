@@ -84,7 +84,7 @@ onBeforeMount(() => {
       <CloseDialogIcon @click="isOpen = false"></CloseDialogIcon>
     </DialogClose>
     <CommandInput placeholder="Search all channels and members" />
-    <CommandList>
+    <CommandList class="p-2">
       <CommandEmpty> No Results found </CommandEmpty>
       <template v-for="item in data">
         <CommandGroup
