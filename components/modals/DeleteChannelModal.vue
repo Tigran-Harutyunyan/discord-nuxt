@@ -10,14 +10,16 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/toast/use-toast";
 import { Button } from "@/components/ui/button";
-import { useModalsStore } from "@/stores/modals";
 import { type Server, type Channel } from "@prisma/client";
+import { useModalsStore } from "@/stores/modals";
+import { useMainStore } from "@/stores/main";
 
 type serverWithChannels = Server & { channels?: Channel[] };
 
 const { type, data, isOpen } = storeToRefs(useModalsStore());
 
-const { onClose, onUpdateChannels } = useModalsStore();
+const { onClose } = useModalsStore();
+const { updateServer } = useMainStore();
 
 const isModalOpen = computed(() => {
   return isOpen.value && type.value === "deleteChannel";
@@ -50,7 +52,7 @@ const onClick = async () => {
 
     if (response?.id) {
       if (response.channels) {
-        onUpdateChannels(response.channels);
+        updateServer(response);
       }
       toast({
         variant: "default",

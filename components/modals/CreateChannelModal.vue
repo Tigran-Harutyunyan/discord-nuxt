@@ -28,10 +28,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import { useModalsStore } from "@/stores/modals";
+import { useMainStore } from "@/stores/main";
 
 const { type, data, isOpen } = storeToRefs(useModalsStore());
 
-const { onClose, onUpdateChannels } = useModalsStore();
+const { onClose } = useModalsStore();
+const { updateServer } = useMainStore();
 
 const isModalOpen = computed(() => {
   return isOpen.value && type.value === "createChannel";
@@ -83,7 +85,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       form.resetForm();
 
       if (response?.channels) {
-        onUpdateChannels(response.channels);
+        updateServer(response);
       }
 
       toast({

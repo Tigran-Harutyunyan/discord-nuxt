@@ -27,7 +27,8 @@ const route = useRoute();
 
 const isModalOpen = isOpen.value && type.value === "editServer";
 
-const { onClose, onSaveServerChanges } = useModalsStore();
+const { onClose } = useModalsStore();
+const { onSaveServerChanges } = useMainStore();
 
 const emit = defineEmits(["done", "close"]);
 

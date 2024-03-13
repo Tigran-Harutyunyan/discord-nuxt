@@ -16,7 +16,6 @@ import ServerSearch from "./ServerSearch.vue";
 import ServerSection from "./ServerSection.vue";
 import ServerChannel from "./ServerChannel.vue";
 import ServerMember from "./ServerMember.vue";
-import { useModalsStore } from "@/stores/modals";
 import { useMainStore } from "@/stores/main";
 
 const { profile } = storeToRefs(useMainStore());
@@ -27,8 +26,8 @@ type ServerSidebarProps = Server & {
 };
 const route = useRoute();
 
-const { data } = storeToRefs(useModalsStore());
-const { updateServer } = useModalsStore();
+const { currentServer } = storeToRefs(useMainStore());
+const { updateServer } = useMainStore();
 
 const isLoading = ref(false);
 
@@ -48,20 +47,20 @@ const getServer = async (serverId: string) => {
   }
 };
 
-if (!data.value?.server) {
+if (!currentServer.value) {
   getServer(
     (route.params?.serverId as string) || (params.value?.serverId as string)
   );
 }
 
 const server = computed<ServerSidebarProps | null>(() => {
-  return data?.value?.server ? data.value.server : null;
+  return currentServer.value ? currentServer.value : null;
 });
 
 watch(
   () => route.path,
   async () => {
-    if (data?.value?.server?.id !== route.params?.serverId) {
+    if (currentServer.value?.id !== route.params?.serverId) {
       getServer(route.params?.serverId as string);
     }
   }

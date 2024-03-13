@@ -32,28 +32,13 @@ export const useModalsStore = defineStore("modals", () => {
         isOpen.value = false;
     }
 
-    function onSaveServerChanges(payload: { name: string, imageUrl: string }) {
-        if (data.value?.server) {
-            data.value.server.name = payload.name;
-            data.value.server.imageUrl = payload.imageUrl;
+    function onMemberRoleChange(memberId: string, role: MemberRole) {
+        if (data.value?.server?.members) {
+            data.value?.server?.members.forEach(member => {
+                if (member.id === memberId) member.role = role;
+            });
         }
-    }
 
-    function onUpdateChannels(channels: Channel[]) {
-        if (data.value?.server) {
-            if (!data.value?.server?.channels) {
-                data.value.server.channels = [];
-            }
-
-            data.value.server.channels = channels;
-        }
-    }
-
-    function updateServer(server: Server) {
-        data.value.server = server;
-    }
-
-    function onMemberRoleChange() {
         updatedMemberEventCount.value++;
     }
 
@@ -64,9 +49,6 @@ export const useModalsStore = defineStore("modals", () => {
         updatedMemberEventCount,
         onOpen,
         onClose,
-        onSaveServerChanges,
-        onUpdateChannels,
-        updateServer,
         onMemberRoleChange
     };
 });

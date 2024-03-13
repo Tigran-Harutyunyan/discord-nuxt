@@ -40,9 +40,11 @@ import { useMainStore } from "@/stores/main";
 
 const { profile } = storeToRefs(useMainStore());
 
+const { updateServer } = useMainStore();
+
 const { type, data, isOpen } = storeToRefs(useModalsStore());
 
-const { onClose, updateServer, onMemberRoleChange } = useModalsStore();
+const { onClose, onMemberRoleChange } = useModalsStore();
 
 const server = computed(() => data.value.server);
 
@@ -105,7 +107,8 @@ const onRoleChange = async (memberId: string, role: MemberRole) => {
 
     if (response?.id) {
       updateServer(response);
-      onMemberRoleChange();
+
+      onMemberRoleChange(memberId, role);
     }
   } catch (error) {
     console.log(error);

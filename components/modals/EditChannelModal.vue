@@ -32,9 +32,11 @@ import { useToast } from "@/components/ui/toast/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useModalsStore } from "@/stores/modals";
+import { useMainStore } from "@/stores/main";
 
+const { updateServer } = useMainStore();
 const { type, data, isOpen } = storeToRefs(useModalsStore());
-const { onClose, onUpdateChannels } = useModalsStore();
+const { onClose } = useModalsStore();
 
 const { toast } = useToast();
 
@@ -82,7 +84,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       form.resetForm();
 
       if (response?.channels) {
-        onUpdateChannels(response.channels);
+        updateServer(response);
       }
 
       toast({
