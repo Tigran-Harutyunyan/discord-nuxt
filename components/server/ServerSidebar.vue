@@ -30,55 +30,40 @@ const route = useRoute();
 const { data } = storeToRefs(useModalsStore());
 const { updateServer } = useModalsStore();
 
-const server = ref<ServerSidebarProps | null>();
-
 const isLoading = ref(false);
 
 const params = useState("routeParams");
 
 const getServer = async (serverId: string) => {
-  if (!serverId || isLoading.value) return;
-  if (server.value && server.value.id === serverId) return;
-
   isLoading.value = true;
 
   const response = await $fetch<ServerSidebarProps | null>(
-    `/api/server/${route.params.serverId}`
+    `/api/server/${serverId}`
   );
 
   isLoading.value = false;
 
   if (response?.id) {
-    server.value = response;
-    updateServer(server.value);
+    updateServer(response);
   }
 };
 
 if (!data.value?.server) {
-  getServer(params.value?.serverId || route.params?.serverId);
-} else {
-  server.value = data.value?.server;
+  getServer(
+    (route.params?.serverId as string) || (params.value?.serverId as string)
+  );
 }
+
+const server = computed<ServerSidebarProps | null>(() => {
+  return data?.value?.server ? data.value.server : null;
+});
 
 watch(
   () => route.path,
   async () => {
-    if (data.value?.server?.id !== route.params?.serverId) {
+    if (data?.value?.server?.id !== route.params?.serverId) {
       getServer(route.params?.serverId as string);
     }
-  }
-);
-
-watch(
-  () => data.value?.server,
-  (members) => {
-    if (server.value && members && Array.isArray(members)) {
-      server.value.members = members;
-      updateServer(server.value);
-    }
-  },
-  {
-    deep: true,
   }
 );
 

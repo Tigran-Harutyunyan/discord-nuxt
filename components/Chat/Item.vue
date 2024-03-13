@@ -162,7 +162,7 @@ watch(
               {{ member.profile.name }}
             </p>
             <ActionTooltip :label="member.role">
-              <component :is="roleIconMap[member.role]"></component>
+              <div><component :is="roleIconMap[member.role]" /></div>
             </ActionTooltip>
           </div>
           <span class="text-xs text-zinc-500 dark:text-zinc-400">

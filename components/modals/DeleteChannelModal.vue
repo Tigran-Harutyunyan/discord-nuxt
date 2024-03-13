@@ -59,7 +59,6 @@ const onClick = async () => {
       });
       onClose();
     }
-    debugger;
 
     if (route.params.channelId && route.params.channelId === channel?.id) {
       router.push(`/servers/${server?.id}`);

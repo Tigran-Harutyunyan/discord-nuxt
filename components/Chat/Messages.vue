@@ -2,6 +2,9 @@
 import { format } from "date-fns";
 import type { Member } from "@prisma/client";
 import { Loader2, ServerCrash } from "lucide-vue-next";
+import { useModalsStore } from "@/stores/modals";
+
+const { updatedMemberEventCount } = storeToRefs(useModalsStore());
 
 interface ChatMessagesProps {
   name: string;
@@ -37,13 +40,19 @@ const chatRef = ref<HTMLInputElement>();
 const bottomRef = ref<HTMLInputElement>();
 const hasInitialized = ref(false);
 
-const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-  useChatQuery({
-    queryKey,
-    apiUrl,
-    paramKey,
-    paramValue,
-  });
+const {
+  data,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+  status,
+  refetch,
+} = useChatQuery({
+  queryKey,
+  apiUrl,
+  paramKey,
+  paramValue,
+});
 
 useChatSocket({ queryKey, addKey, updateKey });
 
@@ -62,6 +71,13 @@ onMounted(() => {
 onUnmounted(() => {
   chatRef.value?.removeEventListener("scroll", handleScroll);
 });
+
+watch(
+  () => updatedMemberEventCount.value,
+  () => {
+    refetch();
+  }
+);
 
 const onChanges = () => {
   const shouldAutoScroll = () => {

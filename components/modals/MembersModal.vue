@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { h } from "vue";
 import qs from "query-string";
-import { MemberRole } from "@prisma/client";
+import { MemberRole, type Server } from "@prisma/client";
 import {
   Check,
   Gavel,
@@ -42,7 +42,7 @@ const { profile } = storeToRefs(useMainStore());
 
 const { type, data, isOpen } = storeToRefs(useModalsStore());
 
-const { onClose, onOpen } = useModalsStore();
+const { onClose, updateServer, onMemberRoleChange } = useModalsStore();
 
 const server = computed(() => data.value.server);
 
@@ -71,11 +71,13 @@ const onKick = async (memberId: string) => {
       },
     });
 
-    const response = await $fetch(url, {
+    const response = await $fetch<Server>(url, {
       method: "DELETE",
     });
 
-    onOpen("members", { server: response });
+    if (response?.id) {
+      updateServer(response);
+    }
   } catch (error) {
     console.log(error);
   } finally {
@@ -94,14 +96,17 @@ const onRoleChange = async (memberId: string, role: MemberRole) => {
       },
     });
 
-    const response = await $fetch(url, {
+    const response = await $fetch<Server>(url, {
       method: "PATCH",
       body: {
         role,
       },
     });
 
-    onOpen("members", { server: response });
+    if (response?.id) {
+      updateServer(response);
+      onMemberRoleChange();
+    }
   } catch (error) {
     console.log(error);
   } finally {

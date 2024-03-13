@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { type Channel, ChannelType, type Server, type Member, type Profile } from "@prisma/client";
+import { type Channel, ChannelType, type Server, type Member, type Profile, MemberRole } from "@prisma/client";
 
 export type ModalType = "createServer" | "invite" | "editServer" | "members" | "createChannel" | "leaveServer" | "deleteServer" | "deleteChannel" | "editChannel" | "messageFile" | "deleteMessage";
 
@@ -19,6 +19,7 @@ export const useModalsStore = defineStore("modals", () => {
     const type = ref<ModalType | null>(null);
     const data = ref<ModalData>({});
     const isOpen = ref(false);
+    const updatedMemberEventCount = ref(0); // for triggering purposes.
 
     function onOpen(t: ModalType | null, d = {}) {
         isOpen.value = true;
@@ -52,14 +53,20 @@ export const useModalsStore = defineStore("modals", () => {
         data.value.server = server;
     }
 
+    function onMemberRoleChange() {
+        updatedMemberEventCount.value++;
+    }
+
     return {
         isOpen,
         type,
         data,
+        updatedMemberEventCount,
         onOpen,
         onClose,
         onSaveServerChanges,
         onUpdateChannels,
-        updateServer
+        updateServer,
+        onMemberRoleChange
     };
 });
