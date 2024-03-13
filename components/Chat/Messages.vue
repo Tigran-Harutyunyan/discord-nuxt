@@ -35,6 +35,7 @@ const updateKey = `chat:${chatId}:messages:update`;
 
 const chatRef = ref<HTMLInputElement>();
 const bottomRef = ref<HTMLInputElement>();
+const hasInitialized = ref(false);
 
 const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
   useChatQuery({
@@ -64,7 +65,8 @@ onUnmounted(() => {
 
 const onChanges = () => {
   const shouldAutoScroll = () => {
-    if (bottomRef?.value) {
+    if (!hasInitialized.value && bottomRef.value) {
+      hasInitialized.value = true;
       return true;
     }
 

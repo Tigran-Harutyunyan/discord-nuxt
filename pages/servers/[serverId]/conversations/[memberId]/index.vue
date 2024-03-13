@@ -14,7 +14,9 @@ definePageMeta({
 });
 const route = useRoute();
 
-const searchParams = route.params;
+const searchParams = computed(() => {
+  return route.query;
+});
 
 const { serverId, memberId } = route.params;
 
