@@ -55,5 +55,5 @@ if (!route.params?.inviteCode) {
 </script>
 
 <template>
-  <div>Checking...</div>
+  <div class="h-full p-4 space-y-2"><Loading /></div>
 </template>

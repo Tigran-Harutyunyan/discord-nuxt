@@ -60,6 +60,11 @@ export default defineEventHandler(async (event) => {
                         role: "asc",
                     }
                 },
+                channels: {
+                    orderBy: {
+                        createdAt: "asc",
+                    },
+                },
             },
         });
         return server;
