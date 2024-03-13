@@ -77,6 +77,10 @@ let currentRoom = ref<Room | undefined>();
 
 const allDeviceTypes = ref({});
 
+const numParticipants = computed(() => {
+  return currentRoom.value?.roomInfo?.numParticipants;
+});
+
 const selectedDevices = ref({});
 const isConnected = ref(false);
 let startTime: number;
@@ -980,7 +984,7 @@ onBeforeUnmount(async () => {
 </script>
 
 <template>
-  <div class="">
+  <div>
     <div class="row">
       <div class="col-md-8">
         <div id="connect-area" v-show="show">
@@ -1267,13 +1271,11 @@ onBeforeUnmount(async () => {
 }
 
 #participants-area {
-  /* display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px; */
+  display: flex;
 }
 
 #participants-area > .participant {
-  width: 100%;
+  flex-direction: column;
 }
 
 #participants-area > .participant::before {
