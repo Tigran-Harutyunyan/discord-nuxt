@@ -175,7 +175,7 @@ watch(
           :href="fileUrl || ''"
           target="_blank"
           rel="noopener noreferrer"
-          class="relative aspect-square rounded-md mt-2 overflow-hidden border flex items-center bg-secondary h-48 w-48"
+          class="relative aspect-square rounded-md mt-2 overflow-hidden flex items-center h-48 w-48"
         >
           <NuxtImg
             :src="fileUrl || ''"

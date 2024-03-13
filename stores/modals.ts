@@ -19,7 +19,7 @@ export const useModalsStore = defineStore("modals", () => {
     const type = ref<ModalType | null>(null);
     const data = ref<ModalData>({});
     const isOpen = ref(false);
-    const updatedMemberEventCount = ref(0); // for triggering purposes.
+    const updateMessageCounter = ref(0); // for triggering purposes.
 
     function onOpen(t: ModalType | null, d = {}) {
         isOpen.value = true;
@@ -39,16 +39,21 @@ export const useModalsStore = defineStore("modals", () => {
             });
         }
 
-        updatedMemberEventCount.value++;
+        updateMessageCounter.value++;
+    }
+
+    function triggerUpdateMessage() {
+        updateMessageCounter.value++;
     }
 
     return {
         isOpen,
         type,
         data,
-        updatedMemberEventCount,
+        updateMessageCounter,
         onOpen,
         onClose,
-        onMemberRoleChange
+        onMemberRoleChange,
+        triggerUpdateMessage
     };
 });

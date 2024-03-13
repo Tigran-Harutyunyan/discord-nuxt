@@ -44,7 +44,7 @@ const { updateServer } = useMainStore();
 
 const { type, data, isOpen } = storeToRefs(useModalsStore());
 
-const { onClose, onMemberRoleChange } = useModalsStore();
+const { onClose, onMemberRoleChange, triggerUpdateMessage } = useModalsStore();
 
 const server = computed(() => data.value.server);
 
@@ -79,6 +79,7 @@ const onKick = async (memberId: string) => {
 
     if (response?.id) {
       updateServer(response);
+      triggerUpdateMessage();
     }
   } catch (error) {
     console.log(error);

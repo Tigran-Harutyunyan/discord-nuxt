@@ -4,7 +4,7 @@ import type { Member } from "@prisma/client";
 import { Loader2, ServerCrash } from "lucide-vue-next";
 import { useModalsStore } from "@/stores/modals";
 
-const { updatedMemberEventCount } = storeToRefs(useModalsStore());
+const { updateMessageCounter } = storeToRefs(useModalsStore());
 
 interface ChatMessagesProps {
   name: string;
@@ -73,7 +73,7 @@ onUnmounted(() => {
 });
 
 watch(
-  () => updatedMemberEventCount.value,
+  () => updateMessageCounter.value,
   () => {
     refetch();
   }
