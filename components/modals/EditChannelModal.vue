@@ -36,7 +36,7 @@ import { useMainStore } from "@/stores/main";
 
 const { updateServer } = useMainStore();
 const { type, data, isOpen } = storeToRefs(useModalsStore());
-const { onClose } = useModalsStore();
+const { onClose, onSaveChannelChanges } = useModalsStore();
 
 const { toast } = useToast();
 
@@ -83,8 +83,13 @@ const onSubmit = form.handleSubmit(async (values) => {
     if (response?.id) {
       form.resetForm();
 
-      if (response?.channels) {
+      if (response?.id) {
         updateServer(response);
+        onSaveChannelChanges({
+          id: data.value.channel?.id,
+          name: values.name,
+          type: values.type,
+        });
       }
 
       toast({

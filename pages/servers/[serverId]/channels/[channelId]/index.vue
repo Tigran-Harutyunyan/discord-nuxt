@@ -4,6 +4,9 @@ definePageMeta({
   layout: "server",
 });
 import { ChannelType, type Channel, type Member } from "@prisma/client";
+import { useModalsStore } from "@/stores/modals";
+
+const { updateChannelCounter, data } = storeToRefs(useModalsStore());
 
 const route = useRoute();
 const router = useRouter();
@@ -19,15 +22,31 @@ if (response?.id) {
   channel.value = response;
 }
 
-const data = await $fetch<Member | undefined>(`/api/member/${serverId}`);
+const memberResponse = await $fetch<Member | undefined>(
+  `/api/member/${serverId}`
+);
 
-if (data?.id) {
-  member.value = data;
+if (memberResponse?.id) {
+  member.value = memberResponse;
 }
 
 if (!channel.value || !member.value) {
   router.push("/");
 }
+
+watch(
+  () => updateChannelCounter.value,
+  () => {
+    if (data?.value?.server?.channels) {
+      data?.value?.server?.channels.forEach((item) => {
+        if (item.id === channel.value?.id) {
+          channel.value.name = item.name;
+          channel.value.type = item.type;
+        }
+      });
+    }
+  }
+);
 </script>
 
 <template>
