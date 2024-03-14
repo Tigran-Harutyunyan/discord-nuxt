@@ -18,7 +18,6 @@ Key Features:
 - Websocket fallback: Polling with alerts
 - ORM using Prisma
 - MySQL database
-- MySQL DB
 - Authentication with Clerk
 
 <img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/screenshot.png">
